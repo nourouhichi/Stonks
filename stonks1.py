@@ -23,6 +23,7 @@ df = df.set_index('t')
 df = df.drop(df.index [ [ 0,1 ] ])
 print(df)
 """visualize data"""
+df = df.rename(columns={'c': 'Closing price'})
 ax = df[['c','upperband','lowerband']].plot( color=['blue', 'orange', 'yellow',])
 plt.xlabel('Timestamp')
 plt.ylabel('Price USD ($)')
