@@ -6,8 +6,6 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
-plt.style.use("fivethirtyeight")
-
 """load data here"""
 api_key = "c0v78b748v6pr2p77hmg"
 symbol = "AAPL"
@@ -17,19 +15,17 @@ url = 'https://finnhub.io/api/v1/indicator?symbol={}&resolution=1&from={}&to={}&
     symbol, initial_timestamp, end_timestamp, api_key)
 res = requests.get(url)
 data= json.dumps(res.json())
+
 """store data in dataframe"""
 df = pd.read_json(data)
 df = df.set_index('t')
 df = df.drop(df.index [ [ 0,1 ] ])
-print(df)
-"""visualize data"""
 df = df.rename(columns={'c': 'Closing price'})
-ax = df[['c','upperband','lowerband']].plot( color=['blue', 'orange', 'yellow',])
+print(df)
+
+"""visualize data"""
+ax = df[['Closing price','upperband','lowerband']].plot()
 plt.xlabel('Timestamp')
 plt.ylabel('Price USD ($)')
 plt.title('Bollinger Bands')
 plt.show()
-"""
-plt.plot(df['c'],label='Closing pricing')
-plt.subplot(bbdf['t'], bbdf['lowerband'])
-"""
