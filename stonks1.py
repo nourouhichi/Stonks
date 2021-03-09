@@ -11,7 +11,7 @@ api_key = "c0v78b748v6pr2p77hmg"
 symbol = "AAPL"
 initial_timestamp = "1605543327"
 end_timestamp = "1605629727"
-url = 'https://finnhub.io/api/v1/indicator?symbol={}&resolution=1&from={}&to={}&nbdevup=2&nbdevdn=2&i&indicator=bbands&token={}'.format(
+url = 'https://finnhub.io/api/v1/indicator?symbol={}&resolution=1&from={}&to={}&nbdevup=2&nbdevdn=2&timeperiod=20&i&indicator=bbands&token={}'.format(
     symbol, initial_timestamp, end_timestamp, api_key)
 res = requests.get(url)
 data= json.dumps(res.json())
@@ -19,8 +19,9 @@ data= json.dumps(res.json())
 """store data in dataframe"""
 df = pd.read_json(data)
 df = df.set_index('t')
-df = df.drop(df.index [ [ 0,1 ] ])
-df = df.rename(columns={'c': 'Closing price'})"""converting timestamp"""
+df = df.drop(df.index [ [i for i in range(0,20) ] ])
+df = df.rename(columns={'c': 'Closing price'})
+"""converting timestamp to datetime format"""
 timestamp_list=[]
 for index in df.index:
     timestamp_list.append(datetime.fromtimestamp(index))
@@ -28,7 +29,7 @@ df.index = timestamp_list
 print(df)
 
 """visualize data"""
-ax = df[['Closing price','upperband','lowerband']].plot()
+ax = df[['Closing price','upperband','lowerband','middleband']].plot()
 plt.xlabel('Timestamp')
 plt.ylabel('Price USD ($)')
 plt.title('Bollinger Bands')
