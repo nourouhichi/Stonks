@@ -20,7 +20,11 @@ data= json.dumps(res.json())
 df = pd.read_json(data)
 df = df.set_index('t')
 df = df.drop(df.index [ [ 0,1 ] ])
-df = df.rename(columns={'c': 'Closing price'})
+df = df.rename(columns={'c': 'Closing price'})"""converting timestamp"""
+timestamp_list=[]
+for index in df.index:
+    timestamp_list.append(datetime.fromtimestamp(index))
+df.index = timestamp_list
 print(df)
 
 """visualize data"""
