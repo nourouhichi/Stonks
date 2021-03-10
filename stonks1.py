@@ -5,6 +5,7 @@ import json
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import mplfinance as mpf
 
 """load data here"""
 api_key = "c0v78b748v6pr2p77hmg"
@@ -20,7 +21,9 @@ data= json.dumps(res.json())
 df = pd.read_json(data)
 df = df.set_index('t')
 df = df.drop(df.index [ [i for i in range(0,20) ] ])
-df = df.rename(columns={'c': 'Closing price'})
+df = df.rename(columns={'c': 'Closing Price'})
+df = df.rename(columns={'middleband': 'SMA 20'})
+
 """converting timestamp to datetime format"""
 timestamp_list=[]
 for index in df.index:
@@ -29,7 +32,10 @@ df.index = timestamp_list
 print(df)
 
 """visualize data"""
-ax = df[['Closing price','upperband','lowerband','middleband']].plot()
+plt.style.use('grayscale')
+ax = df[['Closing Price','upperband','lowerband','SMA 20']].plot(color=["red", "darkgray", "darkgray", "blue"])
+x_axis = df.index.get_level_values(0)
+ax.fill_between(x_axis, df['upperband'], df['lowerband'], color='gainsboro')
 plt.xlabel('Timestamp')
 plt.ylabel('Price USD ($)')
 plt.title('Bollinger Bands')
